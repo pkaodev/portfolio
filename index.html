@@ -22,11 +22,11 @@
     <div id="script-viewer"></div>
 
     <script>
-        // TODO automate this
+        // TODO automate generating this
         const setup_scripts = [
             'script1.bash',
             'script2.bash',
-			'script3.bash',
+            'script3.bash',
         ];
 
         const scriptLinks = document.getElementById('script-links');
@@ -46,13 +46,18 @@
             viewLink.onclick = (event) => {
                 event.preventDefault();
                 fetch(`${baseSetupScriptURL}${script}`)
-                    .then(response => response.text())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Network response was not ok: ${response.statusText}`);
+                        }
+                        return response.text();
+                    })
                     .then(data => {
                         scriptViewer.textContent = data;
                     })
                     .catch(error => {
                         scriptViewer.textContent = `Error loading script ${baseSetupScriptURL}${script}`;
-						console.error(error);
+                        console.error(error);
                     });
             };
 
@@ -64,9 +69,9 @@
 
             // Copy command to clipboard
             copyCommandLink.href = `#`;
-			const setupScriptCurlLocation = `https://pkao.dev/scripts/setup/${script}`;
+            const setupScriptCurlLocation = `https://pkao.dev/scripts/setup/${script}`;
             const curlCommand = `curl -s ${setupScriptCurlLocation} | bash`;
-            copyCommandLink.innerText = curlCommand;
+            copyCommandLink.innerText = `Copy curl command`;
             copyCommandLink.classList.add('script-action');
             copyCommandLink.onclick = (event) => {
                 event.preventDefault();
@@ -80,13 +85,18 @@
             copyScriptLink.onclick = (event) => {
                 event.preventDefault();
                 fetch(`${baseSetupScriptURL}${script}`)
-                    .then(response => response.text())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Network response was not ok: ${response.statusText}`);
+                        }
+                        return response.text();
+                    })
                     .then(data => {
                         copyTextToClipboard(data);
                     })
                     .catch(error => {
                         alert(`Error loading script ${baseSetupScriptURL}${script}`);
-						console.error(error);
+                        console.error(error);
                     });
             };
 
