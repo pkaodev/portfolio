@@ -26,11 +26,12 @@
         const setup_scripts = [
             'script1.bash',
             'script2.bash',
+			'script3.bash',
         ];
 
         const scriptLinks = document.getElementById('script-links');
         const scriptViewer = document.getElementById('script-viewer');
-        const baseURL = 'https://pkaodev.github.io/portfolio/setup_scripts/';
+        const baseSetupScriptURL = 'https://pkaodev.github.io/portfolio/scripts/setup/';
 
         setup_scripts.forEach(script => {
             const listItem = document.createElement('li');
@@ -44,25 +45,26 @@
             viewLink.innerText = `${script}`;
             viewLink.onclick = (event) => {
                 event.preventDefault();
-                fetch(`${baseURL}${script}`)
+                fetch(`${baseSetupScriptURL}${script}`)
                     .then(response => response.text())
                     .then(data => {
                         scriptViewer.textContent = data;
                     })
                     .catch(error => {
-                        scriptViewer.textContent = `Error loading script ${baseURL}${script}`;
+                        scriptViewer.textContent = `Error loading script ${baseSetupScriptURL}${script}`;
                     });
             };
 
             // Download script file
-            downloadLink.href = `${baseURL}${script}`;
+            downloadLink.href = `${baseSetupScriptURL}${script}`;
             downloadLink.download = script;
             downloadLink.innerText = `Download`;
             downloadLink.classList.add('script-action');
 
             // Copy command to clipboard
             copyCommandLink.href = `#`;
-            const curlCommand = `curl ${baseURL}${script} | bash`;
+			const setupScriptCurlLocation = `https://pkao.dev/scripts/setup/${script}`;
+            const curlCommand = `curl -s ${setupScriptCurlLocation} | bash`;
             copyCommandLink.innerText = `Copy curl command`;
             copyCommandLink.classList.add('script-action');
             copyCommandLink.onclick = (event) => {
@@ -76,13 +78,13 @@
             copyScriptLink.classList.add('script-action');
             copyScriptLink.onclick = (event) => {
                 event.preventDefault();
-                fetch(`${baseURL}${script}`)
+                fetch(`${baseSetupScriptURL}${script}`)
                     .then(response => response.text())
                     .then(data => {
                         copyTextToClipboard(data);
                     })
                     .catch(error => {
-                        alert(`Error loading script ${baseURL}${script}`);
+                        alert(`Error loading script ${baseSetupScriptURL}${script}`);
                     });
             };
 
