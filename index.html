@@ -22,14 +22,16 @@
     <div id="script-viewer"></div>
 
     <script>
+        // TODO automate this
         const setup_scripts = [
-            'script1',
-            'script2',
-            // Add more scripts here
+            'script1.bash',
+            'script2.bash',
         ];
 
         const scriptLinks = document.getElementById('script-links');
         const scriptViewer = document.getElementById('script-viewer');
+        const baseURL = 'https://pkaodev.github.io/portfolio/setup_scripts/';
+
         setup_scripts.forEach(script => {
             const listItem = document.createElement('li');
             const viewLink = document.createElement('a');
@@ -42,26 +44,26 @@
             viewLink.innerText = `${script}`;
             viewLink.onclick = (event) => {
                 event.preventDefault();
-                fetch(`setup_scripts/${script}`)
+                fetch(`${baseURL}${script}`)
                     .then(response => response.text())
                     .then(data => {
                         scriptViewer.textContent = data;
                     })
                     .catch(error => {
-                        scriptViewer.textContent = 'Error loading script';
+                        scriptViewer.textContent = `Error loading script ${baseURL}${script}`;
                     });
             };
 
             // Download script file
-            downloadLink.href = `setup_scripts/${script}`;
+            downloadLink.href = `${baseURL}${script}`;
             downloadLink.download = script;
             downloadLink.innerText = `Download`;
             downloadLink.classList.add('script-action');
 
             // Copy command to clipboard
             copyCommandLink.href = `#`;
-			const curlCommand = `curl https://www.pkao.dev/scripts/setup/${script} | bash`;
-            copyCommandLink.innerText = curlCommand;
+            const curlCommand = `curl ${baseURL}${script} | bash`;
+            copyCommandLink.innerText = `Copy curl command`;
             copyCommandLink.classList.add('script-action');
             copyCommandLink.onclick = (event) => {
                 event.preventDefault();
@@ -70,17 +72,17 @@
 
             // Copy script to clipboard
             copyScriptLink.href = `#`;
-            copyScriptLink.innerText = `Copy`;
+            copyScriptLink.innerText = `Copy script`;
             copyScriptLink.classList.add('script-action');
             copyScriptLink.onclick = (event) => {
                 event.preventDefault();
-                fetch(`setup_scripts/${script}`)
+                fetch(`${baseURL}${script}`)
                     .then(response => response.text())
                     .then(data => {
                         copyTextToClipboard(data);
                     })
                     .catch(error => {
-                        alert('Error copying script');
+                        alert(`Error loading script ${baseURL}${script}`);
                     });
             };
 
@@ -99,7 +101,6 @@
             document.execCommand('copy');
             document.body.removeChild(tempTextArea);
         }
-
     </script>
 </body>
 </html>
