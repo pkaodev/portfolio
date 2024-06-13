@@ -31,8 +31,9 @@
 
         const scriptLinks = document.getElementById('script-links');
         const scriptViewer = document.getElementById('script-viewer');
-        const baseSetupScriptURL = 'https://pkaodev.github.io/portfolio/scripts/setup/';
-		const corsProxy = 'https://cors-anywhere.herokuapp.com/';
+        const URLSetupScriptsGithub = 'https://pkaodev.github.io/portfolio/scripts/setup/';
+		const URLSetupScriptsGithubRaw = 'https://raw.githubusercontent.com/pkaodev/portfolio/main/scripts/setup/';
+		<!-- const corsProxy = 'https://cors-anywhere.herokuapp.com/'; -->
 
         setup_scripts.forEach(script => {
             const listItem = document.createElement('li');
@@ -46,7 +47,8 @@
             viewLink.innerText = `${script}`;
             viewLink.onclick = (event) => {
                 event.preventDefault();
-                fetch(`${corsProxy}${baseSetupScriptURL}${script}`)
+				fetch(`${URLSetupScriptsGithubRaw}${script}`)
+                //fetch(`${corsProxy}${URLSetupScriptsGithub}${script}`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error(`Network response was not ok: ${response.statusText}`);
@@ -57,13 +59,13 @@
                         scriptViewer.textContent = data;
                     })
                     .catch(error => {
-                        scriptViewer.textContent = `Error loading script ${baseSetupScriptURL}${script}`;
+                        scriptViewer.textContent = `Error loading script ${URLSetupScriptsGithub}${script}`;
                         console.error(error);
                     });
             };
 
             // Download script file
-            downloadLink.href = `${baseSetupScriptURL}${script}`;
+            downloadLink.href = `${URLSetupScriptsGithub}${script}`;
             downloadLink.download = script;
             downloadLink.innerText = `Download`;
             downloadLink.classList.add('script-action');
@@ -85,7 +87,8 @@
             copyScriptLink.classList.add('script-action');
             copyScriptLink.onclick = (event) => {
                 event.preventDefault();
-                fetch(`${corsProxy}${baseSetupScriptURL}${script}`)
+                // fetch(`${corsProxy}${URLSetupScriptsGithub}${script}`)
+				fetch(`${URLSetupScriptsGithubRaw}${script}`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error(`Network response was not ok: ${response.statusText}`);
@@ -96,7 +99,7 @@
                         copyTextToClipboard(data);
                     })
                     .catch(error => {
-                        alert(`Error loading script ${baseSetupScriptURL}${script}`);
+                        alert(`Error loading script ${URLSetupScriptsGithub}${script}`);
                         console.error(error);
                     });
             };
