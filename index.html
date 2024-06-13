@@ -52,6 +52,7 @@
                     })
                     .catch(error => {
                         scriptViewer.textContent = `Error loading script ${baseSetupScriptURL}${script}`;
+						console.error(error);
                     });
             };
 
@@ -65,7 +66,7 @@
             copyCommandLink.href = `#`;
 			const setupScriptCurlLocation = `https://pkao.dev/scripts/setup/${script}`;
             const curlCommand = `curl -s ${setupScriptCurlLocation} | bash`;
-            copyCommandLink.innerText = `Copy curl command`;
+            copyCommandLink.innerText = curlCommand;
             copyCommandLink.classList.add('script-action');
             copyCommandLink.onclick = (event) => {
                 event.preventDefault();
@@ -85,6 +86,7 @@
                     })
                     .catch(error => {
                         alert(`Error loading script ${baseSetupScriptURL}${script}`);
+						console.error(error);
                     });
             };
 
