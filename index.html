@@ -32,6 +32,7 @@
         const scriptLinks = document.getElementById('script-links');
         const scriptViewer = document.getElementById('script-viewer');
         const baseSetupScriptURL = 'https://pkaodev.github.io/portfolio/scripts/setup/';
+		const corsProxy = 'https://cors-anywhere.herokuapp.com/';
 
         setup_scripts.forEach(script => {
             const listItem = document.createElement('li');
@@ -45,7 +46,7 @@
             viewLink.innerText = `${script}`;
             viewLink.onclick = (event) => {
                 event.preventDefault();
-                fetch(`${baseSetupScriptURL}${script}`, { mode: 'no-cors' })
+                fetch(`${corsProxy}${baseSetupScriptURL}${script}`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error(`Network response was not ok: ${response.statusText}`);
@@ -71,7 +72,7 @@
             copyCommandLink.href = `#`;
             const setupScriptCurlLocation = `https://pkao.dev/scripts/setup/${script}`;
             const curlCommand = `curl -s ${setupScriptCurlLocation} | bash`;
-            copyCommandLink.innerText = `Copy curl command`;
+            copyCommandLink.innerText = curlCommand;
             copyCommandLink.classList.add('script-action');
             copyCommandLink.onclick = (event) => {
                 event.preventDefault();
@@ -80,11 +81,11 @@
 
             // Copy script to clipboard
             copyScriptLink.href = `#`;
-            copyScriptLink.innerText = `Copy script`;
+            copyScriptLink.innerText = `Copy`;
             copyScriptLink.classList.add('script-action');
             copyScriptLink.onclick = (event) => {
                 event.preventDefault();
-                fetch(`${baseSetupScriptURL}${script}`, { mode: 'no-cors' })
+                fetch(`${corsProxy}${baseSetupScriptURL}${script}`)
                     .then(response => {
                         if (!response.ok) {
                             throw new Error(`Network response was not ok: ${response.statusText}`);
