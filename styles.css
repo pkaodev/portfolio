@@ -1,0 +1,77 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+:root {
+    --color-0: #000000;
+
+    --color-1: #0000CC;
+    --color-2: #330099;
+    --color-3: #660066;
+    --color-4: #990033;
+    --color-5: #CC0000;
+
+    --color-6: #000000;
+    --color-7: #000066;
+    --color-8: #660000;
+}
+
+
+.background {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: var(--color-6);
+    overflow: hidden;
+    animation: switchColors 20s linear infinite;
+}
+
+
+@keyframes switchColors {
+    0% {
+        background: var(--color-6);
+    }
+    25% {
+        background: var(--color-7);
+    }
+    50% {
+        background: var(--color-6);
+    }
+    75% {
+        background: var(--color-8);
+    }
+    100% {
+        background: var(--color-6);
+    }
+}
+
+span {
+    width: 6vmin;
+    height: 6vmin;
+    border-radius: 5vmin;
+    backface-visibility: hidden;
+    position: absolute;
+    animation: move 6s linear infinite;
+    box-shadow: 10vmin 0 3vmin;
+}
+
+
+.background span:first-child {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes move {
+    100% {
+        transform: translate3d(0, 0, 0px) rotate(360deg);
+    }
+}
