@@ -6,72 +6,63 @@ html, body {
     height: 100%;
 }
 
-:root {
-    --color-0: #000000;
-
-    --color-1: #0000CC;
-    --color-2: #330099;
-    --color-3: #660066;
-    --color-4: #990033;
-    --color-5: #CC0000;
-
-    --color-6: #000000;
-    --color-7: #000066;
-    --color-8: #660000;
+* {
+    box-sizing: border-box;
 }
+
+:root {
+    --color-0: rgba(0,0,0,1);
+
+    --color-1z: rgba(0,25,0,1);
+    --color-2z: rgba(0,50,0,1);
+    --color-3z: rgba(0,75,0,1);
+    --color-4z: rgba(0,100,0,1);
+    --color-5z: rgba(0,125,0,1);
+    --color-6z: rgba(0,150,0,1);
+    --color-7z: rgba(0,175,0,1);
+    --color-8z: rgba(0,200,0,1);
+    --color-9z: rgba(0,225,0,1);
+    --color-10z: rgba(0,255,0,1);
+
+    --color-1a: rgba(0,25,25,1);
+    --color-2a: rgba(0,50,25,1);
+    --color-3a: rgba(0,75,25,1);
+    --color-4a: rgba(0,100,25,1);
+    --color-5a: rgba(0,125,25,1);
+    --color-6a: rgba(0,150,25,1);
+    --color-7a: rgba(0,175,25,1);
+    --color-8a: rgba(0,200,25,1);
+    --color-9a: rgba(0,225,25,1);
+    --color-10a: rgba(0,255,25,1);
+
+    --color-1b: rgba(0,25,50,1);
+    --color-2b: rgba(0,50,50,1);
+    --color-3b: rgba(0,75,50,1);
+    --color-4b: rgba(0,100,50,1);
+    --color-5b: rgba(0,125,50,1);
+    --color-6b: rgba(0,150,50,1);
+    --color-7b: rgba(0,175,50,1);
+    --color-8b: rgba(0,200,50,1);
+    --color-9b: rgba(0,225,50,1);
+    --color-10b: rgba(0,255,50,1);
+
+    --color-1c: rgba(0,25,75,1);
+    --color-2c: rgba(0,50,75,1);
+    --color-3c: rgba(0,75,75,1);
+    --color-4c: rgba(0,100,75,1);
+    --color-5c: rgba(0,125,75,1);
+    --color-6c: rgba(0,150,75,1);
+    --color-7c: rgba(0,175,75,1);
+    --color-8c: rgba(0,200,75,1);
+    --color-9c: rgba(0,225,75,1);
+    --color-10c: rgba(0,255,75,1);
+}
+
 
 
 .background {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    background: var(--color-6);
-    overflow: hidden;
-    animation: switchColors 20s linear infinite;
-}
-
-
-@keyframes switchColors {
-    0% {
-        background: var(--color-6);
-    }
-    25% {
-        background: var(--color-7);
-    }
-    50% {
-        background: var(--color-6);
-    }
-    75% {
-        background: var(--color-8);
-    }
-    100% {
-        background: var(--color-6);
-    }
-}
-
-span {
-    width: 6vmin;
-    height: 6vmin;
-    border-radius: 5vmin;
-    backface-visibility: hidden;
-    position: absolute;
-    animation: move 6s linear infinite;
-    box-shadow: 10vmin 0 3vmin;
-}
-
-
-.background span:first-child {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-@keyframes move {
-    100% {
-        transform: translate3d(0, 0, 0px) rotate(360deg);
-    }
+    background-color: black;
+    width: 100%;
+    height: 100%;
+    position: relative;
 }
