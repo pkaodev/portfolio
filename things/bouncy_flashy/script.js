@@ -94,28 +94,12 @@ class Quadtree {
 
 const squares = [];
 const tree = new Quadtree({ x: 0, y: 0, width: window.innerWidth, height: window.innerHeight });
-const square_class_styles = ['sqr_1', 'sqr_2', 'sqr_3', 'sqr_4', 'sqr_5', 'sqr_6']
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    createInitialSquares();
-    moveSquares();
+const square_class_styles = ['sqr_1', 'sqr_2', 'sqr_3', 'sqr_4', 'sqr_5', 'sqr_6', 'sqr_7', 'sqr_8', 'sqr_9', 'sqr_10', 'sqr_11', 'sqr_12', 'sqr_13', 'sqr_14', 'sqr_15']; 
+document.addEventListener('click', function(e) {
+    if (e.button === 0) {
+        createSquare(e.clientX, e.clientY);
+    }
 });
-
-async function createInitialSquares() {
-    num_squares = 100000;
-    speed_pix = 6;
-    spawn_delay = 20;
-    rotation_speed = 0.01;
-    for (let i = 0; i < num_squares; i++) {
-        angle = rotation_speed * i * Math.PI;
-        dx = Math.cos(angle) * speed_pix;
-        dy = Math.sin(angle) * speed_pix;
-        createSquare(window.innerWidth / 2, window.innerHeight / 2, dx, dy);
-        await new Promise(r => setTimeout(r, spawn_delay));
-    }       
-}
-
 function change_square_class(square) {
     const currentClass = square.element.classList.value.split(' ').find(cls => square_class_styles.includes(cls));
     const currentIndex = square_class_styles.indexOf(currentClass);
@@ -127,16 +111,20 @@ function change_square_class(square) {
     square.element.classList.add(nextClass);
 }
 
-let color_i = 0;
-function createSquare(x=100, y=100, dx=2, dy=2, width=50, height=50) {
+function createSquare(x, y) {
 
     const square = document.createElement('div');
 
-	square.classList.add(square_class_styles[color_i]);
-    color_i = (color_i + 1) % square_class_styles.length;
+	square.classList.add('sqr_1');
 
+	const width = 50;
+	const height = 50;
 	square.style.width = width + 'px';
 	square.style.height = height + 'px';
+
+	const dx = 2;
+	const dy = 2;
+
 	
 	square.style.left = x + 'px';
 	square.style.top = y + 'px';
@@ -153,12 +141,21 @@ function moveSquares() {
 
     squares.forEach(square => {
         let possibleCollisions = [];
-        // tree.retrieve(possibleCollisions, square);
+        tree.retrieve(possibleCollisions, square);
+
+        for (let other of possibleCollisions) {
+            if (other !== square && isColliding(square, other)) {
+                square.dx = -square.dx;
+                square.dy = -square.dy;
+                other.dx = -other.dx;
+                other.dy = -other.dy;
+                change_square_class(square);
+            }
+        }
 
         square.x += square.dx;
         square.y += square.dy;
 
-        // COLLISIONS WITH WALLS
         if (square.x <= 0 || square.x + square.width >= window.innerWidth) {
             change_square_class(square);
             square.dx = -square.dx;
@@ -175,9 +172,11 @@ function moveSquares() {
     requestAnimationFrame(moveSquares);
 }
 
-// function isColliding(rect1, rect2) {
-//     return !(rect1.x + rect1.width < rect2.x || 
-//              rect1.x > rect2.x + rect2.width || 
-//              rect1.y + rect1.height < rect2.y || 
-//              rect1.y > rect2.y + rect2.height);
-// }
+function isColliding(rect1, rect2) {
+    return !(rect1.x + rect1.width < rect2.x || 
+             rect1.x > rect2.x + rect2.width || 
+             rect1.y + rect1.height < rect2.y || 
+             rect1.y > rect2.y + rect2.height);
+}
+
+moveSquares();

@@ -1,0 +1,118 @@
+ html, body {
+     margin: 0;
+     padding: 0;
+     overflow: hidden;
+     width: 100%;
+     height: 100%;
+    /* animated backgruond */
+    animation: animate_background 10s linear infinite;
+ }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    /* animated backgruond */
+    animation: animate_background 10s linear infinite;
+}
+
+@keyframes animate_background {
+    0% {background-color: rgba(0, 255, 0, 1)}
+    6.66% {background-color: rgba(0, 200, 55, 1)}
+    13.33% {background-color: rgba(0, 150, 100, 1)}
+    20% {background-color: rgba(0, 100, 150, 1)}
+    26.66% {background-color: rgba(0, 50, 200, 1)}
+    33.33% {background-color: rgba(0, 0, 255, 1)}
+    40% {background-color: rgba(50, 0, 200, 1)}
+    46.66% {background-color: rgba(100, 0, 150, 1)}
+    53.33% {background-color: rgba(150, 0, 100, 1)}
+    60% {background-color: rgba(200, 0, 50, 1)}
+    66.66% {background-color: rgba(255, 0, 0, 1)}
+    73.33% {background-color: rgba(200, 50, 0, 1)}
+    80% {background-color: rgba(150, 100, 0, 1)}
+    86.66% {background-color: rgba(100, 150, 0, 1)}
+    93.33% {background-color: rgba(50, 200, 0, 1)}
+    100% {background-color: rgba(0, 255, 0, 1)}
+}
+ 
+ * {
+     box-sizing: border-box;
+ }
+
+
+.sqr_1 {
+    position: absolute;
+    background-color: rgba(0, 255, 0, 0.8)
+}
+
+.sqr_2 {
+    position: absolute;
+    background-color: rgba(0, 200, 55, 0.8)
+}
+
+.sqr_3 {
+    position: absolute;
+    background-color: rgba(0, 150, 100, 0.8)
+}
+
+.sqr_4 {
+    position: absolute;
+    background-color: rgba(0, 100, 150, 0.8)
+}
+
+.sqr_5 {
+    position: absolute;
+    background-color: rgba(0, 50, 200, 0.8)
+}
+
+.sqr_6 {
+    position: absolute;
+    background-color: rgba(0, 0, 255, 0.8)
+}
+
+.sqr_7 {
+    position: absolute;
+    background-color: rgba(50, 0, 200, 0.8)
+}
+
+.sqr_8 {
+    position: absolute;
+    background-color: rgba(100, 0, 150, 0.8)
+}
+
+.sqr_9 {
+    position: absolute;
+    background-color: rgba(150, 0, 100, 0.8)
+}
+
+.sqr_10 {
+    position: absolute;
+    background-color: rgba(200, 0, 50, 0.8)
+}
+
+.sqr_11 {
+    position: absolute;
+    background-color: rgba(255, 0, 0, 0.8)
+}
+
+.sqr_12 {
+    position: absolute;
+    background-color: rgba(200, 50, 0, 0.8)
+}
+
+.sqr_13 {
+    position: absolute;
+    background-color: rgba(150, 100, 0, 0.8)
+}
+
+.sqr_14 {
+    position: absolute;
+    background-color: rgba(100, 150, 0, 0.8)
+}
+
+.sqr_15 {
+    position: absolute;
+    background-color: rgba(50, 200, 0, 0.8)
+}

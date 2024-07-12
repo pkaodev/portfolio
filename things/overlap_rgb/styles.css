@@ -1,0 +1,43 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(5, 5, 5, 0.7);
+  }
+
+
+  :root {
+    --lantern-size: 50%;
+    --red-color: rgba(255, 0, 0, 0.7);
+    --green-color: rgba(0, 255, 0, 0.7);
+    --blue-color: rgba(0, 0, 255, 0.7);
+    --transparent-color: rgba(0, 0, 0, 0);
+}
+.red-lantern, .green-lantern, .blue-lantern {
+    position: absolute;
+    width: var(--lantern-size);
+    height: var(--lantern-size);
+    border-radius: 50%;
+  }
+.red-lantern {
+    top: calc(33% - var(--lantern-size)/2);
+    left: calc(50% - var(--lantern-size)/2);
+    background: radial-gradient(circle, var(--red-color) 0%, rgba(255, 0, 0, 0.5) 50%, rgba(255, 0, 0, 0.1) 75%, var(--transparent-color) 100%);
+}
+
+.green-lantern {
+    top: calc(66% - var(--lantern-size)/2);
+    left: calc(33% - var(--lantern-size)/2);
+    background: radial-gradient(circle, var(--green-color) 0%, rgba(0, 255, 0, 0.5) 50%, rgba(0, 255, 0, 0.1) 75%, var(--transparent-color) 100%);
+}
+
+.blue-lantern {
+    top: calc(66% - var(--lantern-size)/2);
+    left: calc(66% - var(--lantern-size)/2);
+    background: radial-gradient(circle, var(--blue-color), rgba(0, 0, 255, 0.5) 50%, rgba(0, 0, 255, 0.1) 75%, var(--transparent-color) 100%);
+}
+
+  
+  
