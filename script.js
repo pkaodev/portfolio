@@ -94,7 +94,6 @@ class Quadtree {
 
 const squares = [];
 const tree = new Quadtree({ x: 0, y: 0, width: window.innerWidth, height: window.innerHeight });
-const square_class_styles = ['sqr_1', 'sqr_2', 'sqr_3', 'sqr_4', 'sqr_5', 'sqr_6']
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -102,44 +101,80 @@ document.addEventListener('DOMContentLoaded', function() {
     moveSquares();
 });
 
+color_switch_rate = 5;
+curr_color = {
+    r: 255,
+    g: 0,
+    b: 0
+}
+function next_color() {
+    if (curr_color.r == 255 && curr_color.g < 255 && curr_color.b == 0) {
+        curr_color.g += color_switch_rate;
+        if (curr_color.g > 255) {
+            curr_color.g = 255;
+        }
+    }
+    if (curr_color.g == 255 && curr_color.r > 0 && curr_color.b == 0) {
+        curr_color.r -= color_switch_rate;
+        if (curr_color.r < 0) {
+            curr_color.r = 0;
+        }
+    }
+    if (curr_color.g == 255 && curr_color.b < 255 && curr_color.r == 0) {
+        curr_color.b += color_switch_rate;
+        if (curr_color.b > 255) {
+            curr_color.b = 255;
+        }
+    }
+    if (curr_color.b == 255 && curr_color.g > 0 && curr_color.r == 0) {
+        curr_color.g -= color_switch_rate;
+        if (curr_color.g < 0) {
+            curr_color.g = 0;
+        }
+    }
+    if (curr_color.b == 255 && curr_color.r < 255 && curr_color.g == 0) {
+        curr_color.r += color_switch_rate;
+        if (curr_color.r > 255) {
+            curr_color.r = 255;
+        }
+    }
+    if (curr_color.r == 255 && curr_color.b > 0 && curr_color.g == 0) {
+        curr_color.b -= color_switch_rate;
+        if (curr_color.b < 0) {
+            curr_color.b = 0;
+        }
+    }
+    return `rgba(${curr_color.r}, ${curr_color.g}, ${curr_color.b}, `;
+}
+
 async function createInitialSquares() {
     num_squares = 100000;
     speed_pix = 6;
-    spawn_delay = 20;
-    rotation_speed = 0.01;
+    spawn_delay = 5;
+    rotation_speed = 0.05;
     for (let i = 0; i < num_squares; i++) {
         angle = rotation_speed * i * Math.PI;
         dx = Math.cos(angle) * speed_pix;
         dy = Math.sin(angle) * speed_pix;
-        createSquare(window.innerWidth / 2, window.innerHeight / 2, dx, dy);
+        createSquare(window.innerWidth / 2, window.innerHeight / 2, dx, dy, 50, 50, next_color());
         await new Promise(r => setTimeout(r, spawn_delay));
     }       
 }
 
-function change_square_class(square) {
-    const currentClass = square.element.classList.value.split(' ').find(cls => square_class_styles.includes(cls));
-    const currentIndex = square_class_styles.indexOf(currentClass);
-    const nextIndex = (currentIndex + 1) % square_class_styles.length;
-    const nextClass = square_class_styles[nextIndex];
-
-    // Update the class on the square
-    square.element.classList.remove(currentClass);
-    square.element.classList.add(nextClass);
-}
-
-let color_i = 0;
-function createSquare(x=100, y=100, dx=2, dy=2, width=50, height=50) {
+function createSquare(x=100, y=100, dx=2, dy=2, width=50, height=50, color='red') {
 
     const square = document.createElement('div');
 
-	square.classList.add(square_class_styles[color_i]);
-    color_i = (color_i + 1) % square_class_styles.length;
+	square.classList.add('bouncy');
 
 	square.style.width = width + 'px';
 	square.style.height = height + 'px';
 	
 	square.style.left = x + 'px';
 	square.style.top = y + 'px';
+    console.log(`gradient (radial circle, ${color}0.8) 0%, ${color}0.4) 50%, ${color}0.1) 75%, ${color}0) 100%)`)
+
+    square.style.background = `radial-gradient(circle, ${color}0.8) 0%, ${color}0.4) 50%, ${color}0.1) 75%, ${color}0) 100%)`;
 
     document.body.appendChild(square);
     squares.push({ element: square, x: x, y: y, dx: dx, dy: dy, width: width, height: height });
@@ -160,11 +195,11 @@ function moveSquares() {
 
         // COLLISIONS WITH WALLS
         if (square.x <= 0 || square.x + square.width >= window.innerWidth) {
-            change_square_class(square);
+            // change_square_class(square);
             square.dx = -square.dx;
         }
         if (square.y <= 0 || square.y + square.height >= window.innerHeight) {
-            change_square_class(square);
+            // change_square_class(square);
             square.dy = -square.dy;
         }
 
