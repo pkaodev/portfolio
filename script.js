@@ -1,218 +1,98 @@
-class Quadtree {
-    constructor(boundBox, lvl = 0) {
-        this.boundBox = boundBox;
-        this.level = lvl;
-        this.maxLevel = 5;
-        this.maxObjects = 10;
-        this.objects = [];
-        this.nodes = [];
-    }
+let x_min, x_max, y_min, y_max;
+let apples, width_apple = 50, height_apple = 50;
+let snake, snake_speed = 10, x_snake = 0, y_snake = 0, dx_snake, dy_snake, width_snake = 50, height_snake = 50;
+let distances;
 
-    split() {
-        const subWidth = this.boundBox.width / 2;
-        const subHeight = this.boundBox.height / 2;
-        const x = this.boundBox.x;
-        const y = this.boundBox.y;
+// multiple apples
+// snake grows
+// slow turn snake
+// apples move
 
-        this.nodes[0] = new Quadtree({x: x + subWidth, y: y, width: subWidth, height: subHeight}, this.level + 1);
-        this.nodes[1] = new Quadtree({x: x, y: y, width: subWidth, height: subHeight}, this.level + 1);
-        this.nodes[2] = new Quadtree({x: x, y: y + subHeight, width: subWidth, height: subHeight}, this.level + 1);
-        this.nodes[3] = new Quadtree({x: x + subWidth, y: y + subHeight, width: subWidth, height: subHeight}, this.level + 1);
-    }
+// classes: apple, snake, game
 
-    getIndex(rect) {
-        const verticalMidpoint = this.boundBox.x + (this.boundBox.width / 2);
-        const horizontalMidpoint = this.boundBox.y + (this.boundBox.height / 2);
-        const topQuadrant = (rect.y < horizontalMidpoint && rect.y + rect.height < horizontalMidpoint);
-        const bottomQuadrant = (rect.y > horizontalMidpoint);
+document.addEventListener('DOMContentLoaded', function () {
+    x_max = window.innerWidth * 0.95;
+    y_max = window.innerHeight * 0.95;
+    x_min = window.innerWidth * 0.05;
+    y_min = window.innerHeight * 0.05;
 
-        if (rect.x < verticalMidpoint && rect.x + rect.width < verticalMidpoint) {
-            if (topQuadrant) {
-                return 1;
-            } else if (bottomQuadrant) {
-                return 2;
-            }
-        } else if (rect.x > verticalMidpoint) {
-            if (topQuadrant) {
-                return 0;
-            } else if (bottomQuadrant) {
-                return 3;
-            }
-        }
-        return -1;
-    }
-
-    insert(rect) {
-        if (this.nodes[0] != null) {
-            const index = this.getIndex(rect);
-
-            if (index !== -1) {
-                this.nodes[index].insert(rect);
-                return;
-            }
-        }
-
-        this.objects.push(rect);
-
-        if (this.objects.length > this.maxObjects && this.level < this.maxLevel) {
-            if (this.nodes[0] == null) {
-                this.split();
-            }
-
-            let i = 0;
-            while (i < this.objects.length) {
-                const index = this.getIndex(this.objects[i]);
-                if (index !== -1) {
-                    this.nodes[index].insert(this.objects.splice(i, 1)[0]);
-                } else {
-                    i++;
-                }
-            }
-        }
-    }
-
-    retrieve(returnObjects, rect) {
-        const index = this.getIndex(rect);
-        if (index !== -1 && this.nodes[0] != null) {
-            this.nodes[index].retrieve(returnObjects, rect);
-        }
-
-        returnObjects.push(...this.objects);
-    }
-
-    clear() {
-        this.objects = [];
-
-        for (let i = 0; i < this.nodes.length; i++) {
-            if (this.nodes[i] != null) {
-                this.nodes[i].clear();
-                this.nodes[i] = null;
-            }
-        }
-    }
-}
-
-const squares = [];
-const tree = new Quadtree({ x: 0, y: 0, width: window.innerWidth, height: window.innerHeight });
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    createInitialSquares();
-    moveSquares();
+    apples = [];
+    new Apple();
+    new Apple();
+    new Apple();
+    new Apple();
+    new Apple();
+    initialiseSnake();
+    recurseGame();
 });
 
-color_switch_rate = 5;
-curr_color = {
-    r: 255,
-    g: 0,
-    b: 0
-}
-function next_color() {
-    if (curr_color.r == 255 && curr_color.g < 255 && curr_color.b == 0) {
-        curr_color.g += color_switch_rate;
-        if (curr_color.g > 255) {
-            curr_color.g = 255;
-        }
+class Apple {
+    constructor() {
+        this._= document.createElement('div');
+        this.x = 0;
+        this.y = 0;
+        this.respawn();
+        this._.classList.add('apple');
+
+        this._.style.width = width_apple + 'px';
+        this._.style.height = height_apple + 'px';
+
+        document.body.appendChild(this._);
+
+        apples.push(this);
+
     }
-    if (curr_color.g == 255 && curr_color.r > 0 && curr_color.b == 0) {
-        curr_color.r -= color_switch_rate;
-        if (curr_color.r < 0) {
-            curr_color.r = 0;
-        }
+    
+    respawn() {
+        this.y = (y_snake > y_max / 2) ? (y_max / 2 - Math.random() * (y_max / 2 - y_min)) : (y_max / 2 + Math.random() * (y_max / 2 - y_min));
+        this.x = (x_snake > x_max / 2) ? (x_max / 2 - Math.random() * (x_max / 2 - x_min)) : (x_max / 2 + Math.random() * (x_max / 2 - x_min));
+        
+        this._.style.top = this.y + 'px';
+        this._.style.left = this.x + 'px';
+        
     }
-    if (curr_color.g == 255 && curr_color.b < 255 && curr_color.r == 0) {
-        curr_color.b += color_switch_rate;
-        if (curr_color.b > 255) {
-            curr_color.b = 255;
-        }
-    }
-    if (curr_color.b == 255 && curr_color.g > 0 && curr_color.r == 0) {
-        curr_color.g -= color_switch_rate;
-        if (curr_color.g < 0) {
-            curr_color.g = 0;
-        }
-    }
-    if (curr_color.b == 255 && curr_color.r < 255 && curr_color.g == 0) {
-        curr_color.r += color_switch_rate;
-        if (curr_color.r > 255) {
-            curr_color.r = 255;
-        }
-    }
-    if (curr_color.r == 255 && curr_color.b > 0 && curr_color.g == 0) {
-        curr_color.b -= color_switch_rate;
-        if (curr_color.b < 0) {
-            curr_color.b = 0;
-        }
-    }
-    return `rgba(${curr_color.r}, ${curr_color.g}, ${curr_color.b}, `;
 }
 
-async function createInitialSquares() {
-    num_squares = 100000;
-    speed_pix = 6;
-    spawn_delay = 5;
-    rotation_speed = 0.05;
-    for (let i = 0; i < num_squares; i++) {
-        angle = rotation_speed * i * Math.PI;
-        dx = Math.cos(angle) * speed_pix;
-        dy = Math.sin(angle) * speed_pix;
-        createSquare(window.innerWidth / 2, window.innerHeight / 2, dx, dy, 50, 50, next_color());
-        await new Promise(r => setTimeout(r, spawn_delay));
-    }       
+
+
+
+function initialiseSnake() {
+    snake = document.createElement('div');
+    snake.classList.add('snake_head');
+    snake.style.position = 'absolute';
+    snake.style.width = '50px'; 
+    snake.style.height = '50px';
+    snake.style.backgroundColor = 'green';
+    snake.style.left = x_snake + 'px';
+    snake.style.top = y_snake + 'px';
+    document.body.appendChild(snake);
 }
 
-function createSquare(x=100, y=100, dx=2, dy=2, width=50, height=50, color='red') {
+function recurseGame() {
+    // find the closest apple
+    distances = [];
+    for (let i = 0; i < apples.length; i++) {
+        distances.push(Math.sqrt(Math.pow(x_snake - apples[i].x, 2) + Math.pow(y_snake - apples[i].y, 2)));
+    }
+    closest_apple = distances.indexOf(Math.min(...distances));
 
-    const square = document.createElement('div');
+    // let apple_relative_angle = Math.atan2(y_apple - y_snake, x_apple - x_snake);
+    let apple_relative_angle = Math.atan2(apples[closest_apple].y - y_snake, apples[closest_apple].x - x_snake);
+    
+    dx_snake = snake_speed * Math.cos(apple_relative_angle);
+    dy_snake = snake_speed * Math.sin(apple_relative_angle);
 
-	square.classList.add('bouncy');
+    x_snake += dx_snake;
+    y_snake += dy_snake;
 
-	square.style.width = width + 'px';
-	square.style.height = height + 'px';
-	
-	square.style.left = x + 'px';
-	square.style.top = y + 'px';
-    console.log(`gradient (radial circle, ${color}0.8) 0%, ${color}0.4) 50%, ${color}0.1) 75%, ${color}0) 100%)`)
+    snake.style.left = x_snake + 'px';
+    snake.style.top = y_snake + 'px';
 
-    square.style.background = `radial-gradient(circle, ${color}0.8) 0%, ${color}0.4) 50%, ${color}0.1) 75%, ${color}0) 100%)`;
-
-    document.body.appendChild(square);
-    squares.push({ element: square, x: x, y: y, dx: dx, dy: dy, width: width, height: height });
-}
-
-function moveSquares() {
-    tree.clear();
-    squares.forEach(square => {
-        tree.insert(square);
-    });
-
-    squares.forEach(square => {
-        let possibleCollisions = [];
-        // tree.retrieve(possibleCollisions, square);
-
-        square.x += square.dx;
-        square.y += square.dy;
-
-        // COLLISIONS WITH WALLS
-        if (square.x <= 0 || square.x + square.width >= window.innerWidth) {
-            // change_square_class(square);
-            square.dx = -square.dx;
+    for (let i = 0; i < apples.length; i++) {
+        if (Math.abs(x_snake - apples[i].x) <= 5 && Math.abs(y_snake - apples[i].y) <= 5) {
+            apples[i].respawn();
         }
-        if (square.y <= 0 || square.y + square.height >= window.innerHeight) {
-            // change_square_class(square);
-            square.dy = -square.dy;
-        }
+    }
 
-        square.element.style.left = square.x + 'px';
-        square.element.style.top = square.y + 'px';
-    });
-
-    requestAnimationFrame(moveSquares);
+    requestAnimationFrame(recurseGame);
 }
-
-// function isColliding(rect1, rect2) {
-//     return !(rect1.x + rect1.width < rect2.x || 
-//              rect1.x > rect2.x + rect2.width || 
-//              rect1.y + rect1.height < rect2.y || 
-//              rect1.y > rect2.y + rect2.height);
-// }
